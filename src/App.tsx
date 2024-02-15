@@ -34,6 +34,7 @@ function App() {
   return (
     <Stack
       spacing={4}
+      p={4}
       justifyContent={"center"}
       alignItems={"center"}
       boxSizing={"border-box"}
@@ -49,8 +50,8 @@ function App() {
       {data.data && <ProductList data={data.data} />}
       {data?.response?.status === 404 && <Box>No products found</Box>}
       <Pagination
-        count={data.total_pages}
-        page={data.page}
+        count={data.total_pages ?? 1}
+        page={data.page ?? 1}
         onChange={handlePageChange}
       />
     </Stack>
