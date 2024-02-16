@@ -1,11 +1,7 @@
 import { useState } from "react";
+import { QueryParam } from "../utils/types";
 
 const availableParams = ["page", "per_page", "id"];
-
-interface QueryParam {
-  key: string;
-  value: string | number | null;
-}
 
 const parseParams = () => {
   const search = window.location.search;
@@ -26,14 +22,15 @@ export const useQueryParams = () => {
 
   const handleSetQueryParams = (params: QueryParam[]) => {
     const url = new URL(document.location.pathname, document.location.origin);
-    if (params.hasOwnProperty("page")) params = [...queryParams, ...params];
 
+    //If id is not present in params array, add previous params to the array
+    if (!params.hasOwnProperty("id")) params = [...queryParams, ...params];
+
+    //Add params to url.searchParams
     params.forEach((param) => {
       if (param.value) url.searchParams.set(param.key, String(param.value));
       else url.searchParams.delete(param.key);
     });
-
-    console.log(queryParams);
 
     window.history.pushState({}, "", url);
     setQueryParams(parseParams());

@@ -2,9 +2,11 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import { useState } from "react";
 import ProductModal from "../ProductModal/ProductModal";
+import { useProduct } from "../../context/ProductContext/ProductContext";
 
-const ProductListRow = ({ product }: any) => {
+const ProductListRow = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const product = useProduct();
 
   const handleModalOpen = () => {
     setIsOpen(true);
@@ -16,11 +18,7 @@ const ProductListRow = ({ product }: any) => {
 
   return (
     <>
-      <ProductModal
-        product={product}
-        isOpen={isOpen}
-        onClose={handleModalClose}
-      />
+      <ProductModal isOpen={isOpen} onClose={handleModalClose} />
       <TableRow
         key={product.id}
         sx={{ backgroundColor: `${product.color}`, cursor: "pointer" }}

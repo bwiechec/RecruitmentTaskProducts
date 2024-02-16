@@ -6,8 +6,12 @@ interface LoadingOverlayProps {
 
 const LoadingOverlay = ({ open }: LoadingOverlayProps) => {
   return (
-    <Backdrop open={open}>
-      <CircularProgress color="inherit" />
+    <Backdrop
+      open={open}
+      sx={{ position: "absolute" }}
+      data-testid="spinner-backdrop"
+    >
+      <CircularProgress color="inherit" data-testid="spinner" />
     </Backdrop>
   );
 };

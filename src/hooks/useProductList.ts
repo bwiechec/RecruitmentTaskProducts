@@ -1,13 +1,7 @@
 import axios from "axios";
 import { useQuery } from "react-query";
-
-interface QueryParam {
-  key: string;
-  value: string | number | null;
-}
-interface QueryParamObject {
-  [key: string]: string | number | null;
-}
+import { QueryParam, QueryParamObject } from "../utils/types";
+import { useMemo } from "react";
 
 const parseParams = (queryParams: QueryParam[]) => {
   const obj: QueryParamObject = {};
@@ -19,16 +13,16 @@ const parseParams = (queryParams: QueryParam[]) => {
     obj[param.key] = param.value;
   });
 
-  console.log(obj);
-
   return obj;
 };
 
 const useProductList = (queryParams: QueryParam[]) => {
-  const parsedParams = parseParams(queryParams);
-  const url = "https://reqres.in/api/products";
+  const parsedParams = useMemo(() => parseParams(queryParams), [queryParams]);
+
+  const url = "https://reqres.in/api/products?delay=2";
+
   const { isLoading, data, isError, error, status, isPreviousData } = useQuery({
-    queryKey: ["productList", parsedParams],
+    queryKey: [parsedParams],
     queryFn: async () => {
       try {
         const response = await axios.get(url, {
@@ -36,7 +30,6 @@ const useProductList = (queryParams: QueryParam[]) => {
         });
         return response.data;
       } catch (error) {
-        console.error(error);
         return error;
       }
     },

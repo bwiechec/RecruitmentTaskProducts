@@ -6,14 +6,21 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import ProductListRow from "../ProductListRow/ProductListRow";
+import LoadingOverlay from "../LoadingOverlay/LoadingOverlay";
+import { ProductContextProvider } from "../../context/ProductContext/ProductContext";
+import { Product } from "../../utils/types";
 
 interface ProductListProps {
   data: any;
+  isPreviousData?: boolean;
 }
 
-const ProductList = ({ data }: ProductListProps) => {
+const ProductList = ({ data, isPreviousData }: ProductListProps) => {
   return (
-    <TableContainer component={Paper} sx={{ maxWidth: "1280px" }}>
+    <TableContainer
+      component={Paper}
+      sx={{ maxWidth: "1280px", position: "relative" }}
+    >
       <Table>
         <TableHead>
           <TableRow>
@@ -30,14 +37,21 @@ const ProductList = ({ data }: ProductListProps) => {
         </TableHead>
         <TableBody>
           {data.length !== undefined ? (
-            data.map((product: any) => {
-              return <ProductListRow product={product} />;
+            data.map((product: Product) => {
+              return (
+                <ProductContextProvider value={product} key={product.id}>
+                  <ProductListRow />
+                </ProductContextProvider>
+              );
             })
           ) : (
-            <ProductListRow product={data} />
+            <ProductContextProvider value={data} key={data.id}>
+              <ProductListRow />
+            </ProductContextProvider>
           )}
         </TableBody>
       </Table>
+      <LoadingOverlay open={isPreviousData ?? false} />
     </TableContainer>
   );
 };
