@@ -23,8 +23,8 @@ export const useQueryParams = () => {
   const handleSetQueryParams = (params: QueryParam[]) => {
     const url = new URL(document.location.pathname, document.location.origin);
 
-    //If id is not present in params array, add previous params to the array
-    if (!params.hasOwnProperty("id")) params = [...queryParams, ...params];
+    //add new params to previous params
+    params = [...queryParams, ...params];
 
     //Add params to url.searchParams
     params.forEach((param) => {
@@ -32,6 +32,7 @@ export const useQueryParams = () => {
       else url.searchParams.delete(param.key);
     });
 
+    //Push new url to history
     window.history.pushState({}, "", url);
     setQueryParams(parseParams());
   };

@@ -2,6 +2,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import { useProduct } from "../../context/ProductContext/ProductContext";
 import CloseIcon from "@mui/icons-material/Close";
+import { parseTextColor } from "../../utils/helper";
 
 interface ProductModalProps {
   isOpen: boolean;
@@ -10,6 +11,13 @@ interface ProductModalProps {
 
 const ProductModal = ({ isOpen, onClose }: ProductModalProps) => {
   const product = useProduct();
+
+  if (!product) {
+    return null;
+  }
+
+  const color = parseTextColor(product?.color);
+
   return (
     <Modal open={isOpen} onClose={onClose} data-testid="product-modal">
       <Stack
@@ -22,6 +30,7 @@ const ProductModal = ({ isOpen, onClose }: ProductModalProps) => {
         boxShadow={24}
         borderRadius={"0.5rem"}
         position={"absolute"}
+        color={`${color}`}
         minWidth={{
           xs: "200px",
           sm: "300px",

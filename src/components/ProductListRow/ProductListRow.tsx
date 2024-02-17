@@ -3,6 +3,7 @@ import TableRow from "@mui/material/TableRow";
 import { useState } from "react";
 import ProductModal from "../ProductModal/ProductModal";
 import { useProduct } from "../../context/ProductContext/ProductContext";
+import { parseTextColor } from "../../utils/helper";
 
 const ProductListRow = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -16,17 +17,47 @@ const ProductListRow = () => {
     setIsOpen(false);
   };
 
+  if (!product) {
+    return null;
+  }
+
+  const color = parseTextColor(product?.color);
+
   return (
     <>
       <ProductModal isOpen={isOpen} onClose={handleModalClose} />
       <TableRow
-        key={product.id}
-        sx={{ backgroundColor: `${product.color}`, cursor: "pointer" }}
+        key={product?.id}
+        sx={{
+          backgroundColor: `${product?.color}`,
+          cursor: "pointer",
+        }}
         onClick={handleModalOpen}
       >
-        <TableCell align="center">{product.id}</TableCell>
-        <TableCell align="center">{product.name}</TableCell>
-        <TableCell align="center">{product.year}</TableCell>
+        <TableCell
+          sx={{
+            color: `${color}`,
+          }}
+          align="center"
+        >
+          {product?.id}
+        </TableCell>
+        <TableCell
+          sx={{
+            color: `${color}`,
+          }}
+          align="center"
+        >
+          {product?.name}
+        </TableCell>
+        <TableCell
+          sx={{
+            color: `${color}`,
+          }}
+          align="center"
+        >
+          {product?.year}
+        </TableCell>
       </TableRow>
     </>
   );

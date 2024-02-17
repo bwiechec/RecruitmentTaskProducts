@@ -1,11 +1,13 @@
 import "./App.css";
 import useProductList from "./hooks/useProductList";
-import { Box, CircularProgress, Input, Pagination, Stack } from "@mui/material";
+import { Input, Pagination, Stack } from "@mui/material";
 import { useQueryParams } from "./hooks/useQueryParams";
 import { debounce } from "lodash";
 import ProductList from "./components/ProductList/ProductList";
 import ErrorSnackbar from "./components/ErrorSnackbar/ErrorSnackbar";
 import { useEffect, useState } from "react";
+import LoadingOverlay from "./components/LoadingOverlay/LoadingOverlay";
+import NoProductsFound from "./components/NoProductsFound/NoProductsFound";
 
 function App() {
   const { queryParams, handleSetQueryParams } = useQueryParams();
@@ -28,7 +30,8 @@ function App() {
   };
 
   //Error 404 is thrown where no products are found
-  const noData = data?.response?.status === 404 || !data?.data;
+  const noData =
+    data?.response?.status === 404 || !data?.data || data?.data.length === 0;
 
   useEffect(() => {
     if (data?.response?.status && data?.response?.status !== 404) {
@@ -40,17 +43,8 @@ function App() {
     }, 3000);
   }, [data?.response?.status]);
 
-  if (isLoading && !data) {
-    return (
-      <Stack
-        spacing={4}
-        justifyContent={"center"}
-        alignItems={"center"}
-        boxSizing={"border-box"}
-      >
-        <CircularProgress color="inherit" />
-      </Stack>
-    );
+  if (isLoading && (!data || noData)) {
+    return <LoadingOverlay open={isLoading} withoutBackground={true} />;
   }
 
   return (
@@ -69,14 +63,14 @@ function App() {
       <Input
         placeholder="Product Identifier"
         type="number"
-        sx={{ width: "20rem" }}
+        sx={{ maxWidth: "20rem" }}
         onChange={handleIdChange}
         defaultValue={queryParams.find((param) => param.key === "id")?.value}
       />
-      {data.data && (
+      {data.data && !noData && (
         <ProductList data={data.data} isPreviousData={isPreviousData} />
       )}
-      {noData && <Box>No products found</Box>}
+      {noData && <NoProductsFound isPreviousData={isPreviousData ?? false} />}
       <Pagination
         count={data.total_pages ?? 1}
         page={data.page ?? 1}

@@ -2,13 +2,17 @@ import { Backdrop, CircularProgress } from "@mui/material";
 
 interface LoadingOverlayProps {
   open: boolean;
+  withoutBackground?: boolean;
 }
 
-const LoadingOverlay = ({ open }: LoadingOverlayProps) => {
+const LoadingOverlay = ({ open, withoutBackground }: LoadingOverlayProps) => {
   return (
     <Backdrop
       open={open}
-      sx={{ position: "absolute" }}
+      sx={{
+        position: "absolute",
+        backgroundColor: `${withoutBackground ? "transparent" : ""}`,
+      }}
       data-testid="spinner-backdrop"
     >
       <CircularProgress color="inherit" data-testid="spinner" />
