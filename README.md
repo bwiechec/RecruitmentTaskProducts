@@ -72,7 +72,6 @@ npm build
 
 ## Usage
 
-|                                                                                           |                                                                              |
 | :---------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------: |
 |                      _1. Home page_ ![home page](docs/home-page.png)                      |  _2. Loading product(s)_ ![loading product(s)](docs/loading-next-page.png)   |
 | _3. Products filtered by id_ ![products filtered by id](docs/products-filtered-by-id.png) | _4. No products found info_ ![no-products-found](docs/no-products-found.png) |
