@@ -1,4 +1,3 @@
-import "./App.css";
 import useProductList from "./hooks/useProductList";
 import { Input, Pagination, Stack } from "@mui/material";
 import { useQueryParams } from "./hooks/useQueryParams";
@@ -13,6 +12,16 @@ function App() {
   const { queryParams, handleSetQueryParams } = useQueryParams();
   const { data, isLoading, isPreviousData } = useProductList(queryParams);
   const [shouldSnackbarOpen, setShouldSnackbarOpen] = useState(false);
+
+  useEffect(() => {
+    if (data?.response?.status && data?.response?.status !== 404) {
+      setShouldSnackbarOpen(true);
+    }
+
+    setTimeout(() => {
+      handleSnackbarClose();
+    }, 3000);
+  }, [data?.response?.status]);
 
   const handlePageChange = (_event: any, value: number) => {
     handleSetQueryParams([{ key: "page", value: value }]);
@@ -32,16 +41,6 @@ function App() {
   //Error 404 is thrown where no products are found
   const noData =
     data?.response?.status === 404 || !data?.data || data?.data.length === 0;
-
-  useEffect(() => {
-    if (data?.response?.status && data?.response?.status !== 404) {
-      setShouldSnackbarOpen(true);
-    }
-
-    setTimeout(() => {
-      handleSnackbarClose();
-    }, 3000);
-  }, [data?.response?.status]);
 
   if (isLoading && (!data || noData)) {
     return <LoadingOverlay open={isLoading} withoutBackground={true} />;
