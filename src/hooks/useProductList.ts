@@ -19,7 +19,7 @@ const parseParams = (queryParams: QueryParam[]) => {
 const useProductList = (queryParams: QueryParam[]) => {
   const parsedParams = useMemo(() => parseParams(queryParams), [queryParams]);
 
-  const url = "https://reqres.in/api/products?delay=2";
+  const url = "https://reqres.in/api/products";
 
   const { isLoading, data, isError, error, status, isPreviousData } = useQuery({
     queryKey: [parsedParams],
